@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Showing pixel and tile coordinates</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoCbqUGlJwmxR8P29YLvv4JQz4Bz5oJ9s&signed_in=true"></script>
+    <script>
+      var labels= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var labelIndex = 0;
+
+      function initialize(){
+          var bangalore = { lat: 12.97, lng: 77.59};
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: bangalore
+          });
+
+          map.addListener('click',function(e) {
+          // google.maps.event.addListener(map, 'click', function(e) {
+            addMarker(e.latLng, map);
+          });
+
+          addMarker(bangalore, map);
+      }
+
+      function addMarker(location, map){
+        var marker = new google.maps.Marker({
+          map: map,
+          position: location,
+          label: labels[labelIndex++ %labels.length]
+        });
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+    <body>
+      <div id="map"></div>
+    </body>
+    </html>
