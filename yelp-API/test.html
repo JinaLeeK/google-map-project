@@ -16,15 +16,15 @@
         };
 
         var terms = 'food';
-        var near = 'San+Francisco';
-
+        var near = '0,0';
         var accessor = {
           consumerSecret : auth.consumerSecret,
           tokenSecret : auth.accessTokenSecret
         };
         parameters = [];
         parameters.push(['term', terms]);
-        parameters.push(['location', near]);
+        parameters.push(['ll', near]);
+        // parameters.push(['cll', near]);
         parameters.push(['callback', 'cb']);
         parameters.push(['oauth_consumer_key', auth.consumerKey]);
         parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
