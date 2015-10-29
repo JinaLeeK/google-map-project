@@ -24,8 +24,10 @@
         var infowindow = new google.maps.InfoWindow(); // infowindow
         var auth = {};
         // authenticatoin to access Yelp API
+
+
         $.ajax({
-          'url' : "../config/test.php",
+          'url' : "../config/config.php",
           'dataType' : "json",
           'success' : function(data) {
             for (var index in data) {
@@ -89,6 +91,7 @@
 
         //function to get data from YELP
         yoh.getYelp = function(terms, ll) {
+          yoh.getAPI();
           var accessor = {
             consumerSecret: auth.consumerSecret,
             tokenSecret: auth.accessTokenSecret
