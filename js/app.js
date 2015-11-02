@@ -8,18 +8,23 @@ var auth = {};
 
   // function to get Yelp API Keyauthentication to access Yelp API
   yoh.getAPI = function() {
-    $.ajax({
-      'url' : "./config/config.php",
-      'dataType' : "json",
-      'success' : function(data) {
-        for (var index in data) {
-          auth[index] = data[index];
-        }
-        auth.serviceProvider = {
-          signatureMethod : "HMAC-SHA1"
-        }
-      }
-    });
+    auth = {'consumerKey' : '8JG3jYSS0qz9ysi826Ha6Q',
+             'consumerSecret' : 'mhYhjI6e0t8cKNReiwhcP4UNVe8',
+             'accessToken' : '8taFgd1FgD41cJo1eEUSIWoZVtFvtYcp',
+             'accessTokenSecret' : 'H5fuG8jCvJDBxEFgPOVecoAeU_M'};
+
+    // $.ajax({
+    //   'url' : "./config/config.php",
+    //   'dataType' : "json",
+    //   'success' : function(data) {
+    //     for (var index in data) {
+    //       auth[index] = data[index];
+    //     }
+    //     auth.serviceProvider = {
+    //       signatureMethod : "HMAC-SHA1"
+    //     }
+    //   }
+    // });
   }
 
   // }
