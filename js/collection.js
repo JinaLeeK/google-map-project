@@ -5,19 +5,8 @@ var app = app || {};
   'user strict';
 
   var Togos = Backbone.Collection.extend({
-    model: app.Togo,
+    model: app.Where
 
-    location: function(input) {
-      this.save({
-        location: input
-      });
-    },
-
-    address: function(address) {
-      this.save({
-        address: address
-      });
-    }
 
   });
 

@@ -12,11 +12,8 @@ var app = app || {};
 		// Default attributes for the togo
 		defaults: {
 			location: '',
-			address: 'test',
-			near : 100,
-			destination: '',
-			fare : 0,
-			distance: 0
+			address: '',
+			near : 0
 		},
 
 		changeLocation: function(input) {
@@ -28,6 +25,12 @@ var app = app || {};
 		changeAddress: function(input) {
 			this.set({
 				address: input
+			})
+		},
+
+		changeNear: function(input) {
+			this.set({
+				near: input
 			})
 		}
 
