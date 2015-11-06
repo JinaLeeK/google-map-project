@@ -11,9 +11,16 @@ var app = app || {};
 	var Togo = Backbone.Model.extend({
 		// Default attributes for the togo
 		defaults: {
+			map: {},
 			location: '',
 			address: '',
 			near : 0
+		},
+
+		changeMap: function(input) {
+			this.set({
+				map: input
+			})
 		},
 
 		changeLocation: function(input) {

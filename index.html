@@ -14,6 +14,22 @@
 
   <body>
     <div id="map">
+      <select id="countries" class="controls">
+        <option value="all" selected>All</option>
+        <option value="au">Australia</option>
+        <option value="br">Brazil</option>
+        <option value="ca">Canada</option>
+        <option value="fr">France</option>
+        <option value="de">Germany</option>
+        <option value="mx">Mexico</option>
+        <option value="nz">New Zealand</option>
+        <option value="it">Italy</option>
+        <option value="za">South Africa</option>
+        <option value="es">Spain</option>
+        <option value="pt">Portugal</option>
+        <option value="us">U.S.A.</option>
+        <option value="uk">United Kingdom</option>
+      </select>
       <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
       <input id="near-input" class="controls" type="text" placeholder="within(meters)">
       <div id="map_canvas"></div>
@@ -26,7 +42,9 @@
     <!-- <script src="bower_components/backbone.localStorage/backbone.localStorage.js"></script> -->
 
     <script src="js/model/model.js"></script>
-		<!-- <script src="js/collection.js"></script> -->
+    <script src="js/model/model_destination.js"></script>
+		<script src="js/collection.js"></script>
+    <script src="js/view/togo-view.js"></script>
 		<script src="js/view/app-view.js"></script>
 		<script src="app.js"></script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoCbqUGlJwmxR8P29YLvv4JQz4Bz5oJ9s&callback=initMap" async defer></script> -->

@@ -5,9 +5,9 @@ var app = app || {};
 
   app.Where = Backbone.Model.extend({
     defaults: {
-      place: '',
-      name: '',
-      distance: 0
+      id: '',
+      info: {},
+      location: {}
     }
   });
 })();

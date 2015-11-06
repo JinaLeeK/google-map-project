@@ -9,9 +9,6 @@ var app = app || {};
 
 
   });
-
-
-
   app.togos = new Togos();
 
 })();
