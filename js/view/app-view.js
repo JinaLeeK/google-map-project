@@ -11,7 +11,7 @@ var app = app || {};
 
     events: {
       'keypress #near-input': 'setRadius',
-      // 'change #countries' : 'setCountry'
+      'change #countries': 'onChangeCountry',
     },
 
     initialize: function() {
@@ -19,11 +19,8 @@ var app = app || {};
       this.myLocation = this.$("#pac-input")[0];
       this.myNear = this.$("#near-input")[0];
       this.myMap = this.$("#map_canvas")[0];
-      // this.autocomplete;
 
-      this.mapSetting();
-      this.setInput();
-      this.circle;
+      this.initMap();
 
       this.listenTo(app.togos, 'add', this.addone);
       this.listenTo(app.togo, 'change:location', this.newLocation);
@@ -32,29 +29,78 @@ var app = app || {};
     },
 
     render: function() {
-      // this.place = togo.get("location");
-      // if (app.togos.length){
-      //
-      // } else {
-      // this.showMap(new google.maps.LatLng(33.640728, -84.427700));
-      // }
     },
 
-    addone: function(where) {
-      new app.TogoView({model: where});
+    initMap: function() {
+      this.map = new google.maps.Map(this.myMap, {
+          zoom: 2,
+          center: {lat:15, lng:0},
+          mapTypeId : google.maps.MapTypeId.ROADMAP
+      });
+
+      this.marker = new google.maps.Marker({
+          map: this.map,
+          anchorPoint: new google.maps.Point(0, -29)
+      });
+      this.infowindow = new google.maps.InfoWindow();
+
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myCountry);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myLocation);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myNear);
+
+      this.autocomplete = new google.maps.places.Autocomplete(this.myLocation);
+      this.autocomplete.bindTo('bounds', this.map);
+      this.autocomplete.addListener('place_changed', this.onChangePlace, this.autocomplete);
+
+      this.places = new google.maps.places.PlacesService(this.map);
     },
 
-    setCountry: function(autocomplete) {
-      var country = $("#countries").val();
-      if (country == 'all') {
-        autocomplete.setComponentRestrictions([]);
-        this.map.setCenter({lat:15, lng:0});
+    onChangePlace: function() {
+      var place = this.getPlace();
+
+      if (!place.geometry) {
+        window.alert("Autocomplete's returned place contains no geometry");
+        return;
+      }
+
+      var address = '';
+
+      if (place.address_components) {
+        address = [
+          (place.address_components[0] && place.address_components[0].short_name || ''),
+          (place.address_components[1] && place.address_components[1].short_name || ''),
+          (place.address_components[2] && place.address_components[2].short_name || '')
+          ].join(' ');
+        }
+        app.togo.changeAddress(address);
+        app.togo.changeLocation(place);
+    },
+
+    onChangeCountry: function() {
+      var country = this.myCountry.value;
+
+      if (country === 'all') {
+        this.autocomplete.setComponentRestrictions([]);
+        this.map.setCenter({lat: 15, lng:0});
         this.map.setZoom(2);
       } else {
-        autocomplete.setComponentRestrictions({'country': country});
+        this.autocomplete.setComponentRestrictions({'country' : country});
         this.map.setCenter(countries[country].center);
         this.map.setZoom(countries[country].zoom);
       }
+      document.getElementById('pac-input').value = '';
+      document.getElementById('near-input').value = '';
+      document.getElementById('pac-input').placeholder = 'Enter a city';
+      document.getElementById('near-input').placeholder = 'within(m)';
+      app.togos.reset();
+      this.marker.setVisible(false);
+    },
+
+
+
+
+    addone: function(where) {
+      new app.TogoView({model: where});
     },
 
     setRadius: function(e) {
@@ -119,19 +165,7 @@ var app = app || {};
       };
     },
 
-    mapSetting: function() {
-      this.map = new google.maps.Map(this.myMap, {
-          zoom: 2,
-          center: {lat:15, lng:0},
-          mapTypeId : google.maps.MapTypeId.ROADMAP
-      });
 
-      this.marker = new google.maps.Marker({
-          map: this.map,
-          anchorPoint: new google.maps.Point(0, -29)
-        });
-      this.infowindow = new google.maps.InfoWindow();
-    },
 
     newLocation: function() {
       this.marker.setVisible(false);
@@ -157,53 +191,5 @@ var app = app || {};
         // this.infowindow.setContent('<div><strong>' + this.place.name + '</strong><br>' + app.togo.get("address"));
         // this.infowindow.open(this.map, this.marker);
     },
-
-    setInput : function() {
-      var control = this;
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myCountry);
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myLocation);
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myNear);
-
-      var autocomplete = new google.maps.places.Autocomplete(this.myLocation, {
-          componentRestrictions: {'country' : 'all'}
-      });
-
-      autocomplete.bindTo('bounds', this.map);
-      this.places = new google.maps.places.PlacesService(this.map);
-
-      this.myCountry.addEventListener('change', function() {
-        var country = $("#countries").val();
-        if (country == 'all') {
-          autocomplete.setComponentRestrictions([]);
-          control.map.setCenter({lat:15, lng:0});
-          control.map.setZoom(2);
-        } else {
-          autocomplete.setComponentRestrictions({'country': country});
-          control.map.setCenter(countries[country].center);
-          control.map.setZoom(countries[country].zoom);
-        }
-      });
-
-      autocomplete.addListener('place_changed', function() {
-        var place = autocomplete.getPlace();
-
-        if (!place.geometry) {
-          window.alert("Autocomplete's returned place contains no geometry");
-          return;
-        }
-
-        var address = '';
-        if (place.address_components) {
-          address = [
-            (place.address_components[0] && place.address_components[0].short_name || ''),
-            (place.address_components[1] && place.address_components[1].short_name || ''),
-            (place.address_components[2] && place.address_components[2].short_name || '')
-          ].join(' ');
-        }
-        app.togo.changeAddress(address);
-        app.togo.changeLocation(place);
-      })
-    }
-
 });
 })(jQuery);
