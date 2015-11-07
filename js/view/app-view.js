@@ -74,6 +74,7 @@ var app = app || {};
         }
         app.togo.changeAddress(address);
         app.togo.changeLocation(place);
+        console.log(place);
     },
 
     onChangeCountry: function() {
@@ -95,8 +96,6 @@ var app = app || {};
       app.togos.reset();
       this.marker.setVisible(false);
     },
-
-
 
 
     addone: function(where) {
@@ -161,7 +160,8 @@ var app = app || {};
       return {
         id: char,
         info: result,
-        location: result.geometry.location
+        location: result.geometry.location,
+        visible: false
       };
     },
 

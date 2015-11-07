@@ -7,7 +7,8 @@ var app = app || {};
     defaults: {
       id: '',
       info: {},
-      location: {}
+      location: {},
+      visible: false
     }
   });
 })();

@@ -5,7 +5,15 @@ var app = app || {};
   'user strict';
 
   var Togos = Backbone.Collection.extend({
-    model: app.Where
+    model: app.Where,
+
+    selectedMarker: function() {
+      return this.where({visible: true});
+    },
+
+    unselectedMarker: function() {
+      return this.where({visible: false});
+    }
 
 
   });
