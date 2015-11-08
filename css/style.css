@@ -74,3 +74,35 @@ html, body, #map {
 #map_canvase {
   margin-right: 400px;
 }
+.dir_start {
+	font-weight: bold; padding: 5px; background: #E47D25; color: #fff;
+}
+.dir_end {
+	font-weight: bold; padding: 5px; background: #C16417; color: #fff;
+}
+.dir_summary {
+	padding: 5px;
+}
+.dir_row{
+	font-size: 14px;
+	padding-right: 10px;
+}
+.dir_sprite{
+	width:	20px;
+	height:	20px;
+	display: block;
+}
+/*.turn-sharp-left{ background: url('images/maneuvers-new.png') 0px 0px ;	}
+.turn-sharp-right{ background: url('images/maneuvers-new.png') 0px -20px ; }
+.turn-left{	background: url('images/maneuvers-new.png') 0px -40px ;	}
+.turn-right{ background: url('images/maneuvers-new.png') 0px -60px ; }
+.turn-slight-left{ background: url('images/maneuvers-new.png') 0px -80px ; }
+.turn-slight-right{	background: url('images/maneuvers-new.png') 0px -100px ; }
+.ramp-left{	background: url('images/maneuvers-new.png') 0px -120px ; }
+.ramp-right{ background: url('images/maneuvers-new.png') 0px -140px ; }
+.fork-left{	background: url('images/maneuvers-new.png') 0px -160px ; }
+.fork-right{ background: url('images/maneuvers-new.png') 0px -180px ; }
+.straight{ background: url('images/maneuvers-new.png') 0px -200px ; }
+.merge{ background: url('images/maneuvers-new.png') 0px -220px ; }
+.roundabout-left{ background: url('images/maneuvers-new.png') 0px -240px ; }
+.roundabout-right{ background: url('images/maneuvers-new.png') 0px -260px ; }*/

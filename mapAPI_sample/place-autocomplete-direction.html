@@ -60,9 +60,9 @@
             var destination_input = document.getElementById('destination-input');
             var modes = document.getElementById('mode-selector');
 
-            maps.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
-            maps.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
-            maps.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);
 
             var origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
             origin_autocomplete.bindTo('bounds', map);
@@ -105,7 +105,7 @@
             });
 
             destination_autocomplete.addListener('place_changed', function() {
-              var place = destination_atucomplete.getPlace();
+              var place = destination_autocomplete.getPlace();
 
               if(!place.geometry) {
                 window.alert("Autocomplete's returned place contains no geometry");
@@ -127,15 +127,15 @@
                   directionsService.route({
                     origin: {'placeId': origin_place_id},
                     destination: {'placeId': destination_place_id},
-                    travelModel: travel_mode
+                    travelMode: travel_mode
                   }, function(response, status) {
-                    directionsDisplace.setDirections(response);
+                    directionsDisplay.setDirections(response);
                   });
                 }
               }
-          }
+
         </script>
 
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoCbqUGlJwmxR8P29YLvv4JQz4Bz5oJ9s&callback=initMap" async defer></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoCbqUGlJwmxR8P29YLvv4JQz4Bz5oJ9s&libraries=places&callback=initMap" async defer></script>
     </body>
     </html>

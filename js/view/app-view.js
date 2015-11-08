@@ -1,4 +1,5 @@
 /*global Backbone, jQuery, _, ENTER_KEY */
+// function : autocomplete, search places, directions
 var app = app || {};
 
 (function ($) {
@@ -11,7 +12,7 @@ var app = app || {};
 
     events: {
       'keypress #near-input': 'setRadius',
-      'change #countries': 'onChangeCountry',
+      'change #countries': 'countryChange',
     },
 
     initialize: function() {
@@ -20,64 +21,40 @@ var app = app || {};
       this.myNear = this.$("#near-input")[0];
       this.myMap = this.$("#map_canvas")[0];
 
-      this.initMap();
-
       this.listenTo(app.togos, 'add', this.addone);
-      this.listenTo(app.togo, 'change:location', this.newLocation);
+      this.listenTo(app.togo, 'change:location', this.changeLocation);
       this.listenTo(app.togo, 'change:location', this.searchPlaces);
       this.listenTo(app.togo, 'change:near', this.searchPlaces);
+
+      this.render();
     },
 
     render: function() {
+      this.mapSetup();
+      this.autoCompleteSetup();
+      this.markerSetup();
+      this.searchPlacesSetup();
     },
 
-    initMap: function() {
-      this.map = new google.maps.Map(this.myMap, {
-          zoom: 2,
-          center: {lat:15, lng:0},
-          mapTypeId : google.maps.MapTypeId.ROADMAP
-      });
-
-      this.marker = new google.maps.Marker({
-          map: this.map,
-          anchorPoint: new google.maps.Point(0, -29)
-      });
-      this.infowindow = new google.maps.InfoWindow();
-
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myCountry);
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myLocation);
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myNear);
-
-      this.autocomplete = new google.maps.places.Autocomplete(this.myLocation);
-      this.autocomplete.bindTo('bounds', this.map);
-      this.autocomplete.addListener('place_changed', this.onChangePlace, this.autocomplete);
-
+    searchPlacesSetup: function() {
       this.places = new google.maps.places.PlacesService(this.map);
     },
 
-    onChangePlace: function() {
-      var place = this.getPlace();
-
-      if (!place.geometry) {
-        window.alert("Autocomplete's returned place contains no geometry");
-        return;
-      }
-
-      var address = '';
-
-      if (place.address_components) {
-        address = [
-          (place.address_components[0] && place.address_components[0].short_name || ''),
-          (place.address_components[1] && place.address_components[1].short_name || ''),
-          (place.address_components[2] && place.address_components[2].short_name || '')
-          ].join(' ');
-        }
-        app.togo.changeAddress(address);
-        app.togo.changeLocation(place);
-        console.log(place);
+    markerSetup: function() {
+      this.marker = new google.maps.Marker({
+          map: this.map,
+          anchorPoint: new google.maps.Point(0, -29),
+          title: 'start point'
+      });
     },
 
-    onChangeCountry: function() {
+    autoCompleteSetup: function() {
+      this.autocomplete = new google.maps.places.Autocomplete(this.myLocation);
+      this.autocomplete.bindTo('bounds', this.map);
+      this.autocomplete.addListener('place_changed', this.getPlace, this.autocomplete);
+    },
+
+    countryChange: function() {
       var country = this.myCountry.value;
 
       if (country === 'all') {
@@ -89,6 +66,7 @@ var app = app || {};
         this.map.setCenter(countries[country].center);
         this.map.setZoom(countries[country].zoom);
       }
+
       document.getElementById('pac-input').value = '';
       document.getElementById('near-input').value = '';
       document.getElementById('pac-input').placeholder = 'Enter a city';
@@ -97,6 +75,39 @@ var app = app || {};
       this.marker.setVisible(false);
     },
 
+    mapSetup: function() {
+      this.map = new google.maps.Map(this.myMap, {
+          zoom: 2,
+          center: {lat:15, lng:0},
+          mapTypeId : google.maps.MapTypeId.ROADMAP
+      });
+
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myCountry);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myLocation);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myNear);
+
+    },
+
+    getPlace: function() {
+      app.togos.reset();
+
+      var place = this.getPlace();
+      if (!place.geometry) {
+        window.alert("Autocomplete's returned place contains no geometry");
+        return;
+      }
+
+      var address = '';
+      if (place.address_components) {
+        address = [
+          (place.address_components[0] && place.address_components[0].short_name || ''),
+          (place.address_components[1] && place.address_components[1].short_name || ''),
+          (place.address_components[2] && place.address_components[2].short_name || '')
+          ].join(' ');
+        }
+        app.togo.changeAddress(address);
+        app.togo.changeLocation(place);
+    },
 
     addone: function(where) {
       new app.TogoView({model: where});
@@ -139,7 +150,7 @@ var app = app || {};
     },
 
     search: function(place, radius) {
-      var control = this;
+      var _this = this;
       var search = {
         location: this.map.getCenter(),
         radius: radius,
@@ -150,13 +161,14 @@ var app = app || {};
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i=0; i<results.length; i++) {
             var char = String.fromCharCode('A'.charCodeAt(0) + i);
-            app.togos.add(control.newAttributes(char,results[i]));
+            app.togos.add(_this.newAttributes(char,results[i]));
           }
         }
       });
     },
 
     newAttributes: function(char, result) {
+      console.log(result);
       return {
         id: char,
         info: result,
@@ -165,11 +177,9 @@ var app = app || {};
       };
     },
 
-
-
-    newLocation: function() {
+    changeLocation: function() {
       this.marker.setVisible(false);
-      this.infowindow.close();
+      // this.infowindow.close();
 
       this.place = app.togo.get("location");
       if (this.place.geometry.viewport) {
@@ -178,6 +188,7 @@ var app = app || {};
         this.map.setCenter(this.place.geometry.location);
         this.map.setZoom(17);
       }
+
       this.marker.setIcon({
         url: this.place.icon,
         size: new google.maps.Size(71,71),
