@@ -50,7 +50,7 @@
         z-index: 5;
         background-color: #fff;
       }
-      #radius {
+      #controls {
         position: absolute;
         left: 300px;
         width: 140px;
@@ -59,9 +59,6 @@
         background-color: #fff;
       }
       #autocomplete {
-        width: 100%;
-      }
-      #near {
         width: 100%;
       }
       #country {
@@ -98,19 +95,16 @@
   </head>
 
   <body>
+
     <div id="findhotels">
       Find hotels in:
-
     </div>
 
     <div id="locationField">
       <input id="autocomplete" placeholder="Enter a city" type="text" />
     </div>
 
-    <div id="radius">
-      <input id="near" placeholder="near(meters)" type="text"/>
-    </div>
-    <!-- <div id="controls">
+    <div id="controls">
       <select id="country">
         <option value="all">All</option>
         <option value="au">Australia</option>
@@ -127,7 +121,7 @@
         <option value="us" selected>U.S.A.</option>
         <option value="uk">United Kingdom</option>
       </select>
-    </div> -->
+    </div>
 
     <div id="map"></div>
 
@@ -170,7 +164,7 @@
 // country. It then displays markers for all the hotels returned,
 // with on-click details for each hotel.
 
-var map, places, infoWindow, bounds;
+var map, places, infoWindow;
 var markers = [];
 var autocomplete;
 var countryRestrict = {'country': 'us'};
@@ -248,35 +242,38 @@ function initMap() {
 
   // Create the autocomplete object and associate it with the UI input control.
   // Restrict the search to the default country, and to place type "cities".
-  autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('autocomplete')), {
+        types: ['(cities)'],
+        componentRestrictions: countryRestrict
+      });
   places = new google.maps.places.PlacesService(map);
 
   autocomplete.addListener('place_changed', onPlaceChanged);
 
-
+  // Add a DOM event listener to react when the user selects a country.
+  document.getElementById('country').addEventListener(
+      'change', setAutocompleteCountry);
 }
 
 // When the user selects a city, get the place details for the city and
 // zoom the map in on the city.
 function onPlaceChanged() {
   var place = autocomplete.getPlace();
-  var radius = document.getElementById("near").value;
-  if (place.geometry && radius) {
+  if (place.geometry) {
     map.panTo(place.geometry.location);
     map.setZoom(15);
-    bounds = new google.maps.LatLngBounds();
-    search(radius);
+    search();
   } else {
     document.getElementById('autocomplete').placeholder = 'Enter a city';
-    document.getElementById('near').placeholder = 'near(meters)';
   }
 }
 
 // Search for hotels in the selected city, within the viewport of the map.
-function search(radius) {
+function search() {
   var search = {
-    location: map.getCenter(),
-    radius: parseInt(radius),
+    bounds: map.getBounds(),
     types: ['lodging']
   };
 
@@ -295,20 +292,13 @@ function search(radius) {
           animation: google.maps.Animation.DROP,
           icon: markerIcon
         });
-
-        if (results[i].geometry.viewport) {
-          bounds.union(results[i].geometry.viewport);
-        } else {
-          bounds.extend(results[i].geometry.location);
-        }
         // If the user clicks a hotel marker, show the details of that hotel
         // in an info window.
         markers[i].placeResult = results[i];
-        // google.maps.event.addListener(markers[i], 'click', showInfoWindow);
+        google.maps.event.addListener(markers[i], 'click', showInfoWindow);
         setTimeout(dropMarker(i), i * 100);
         addResult(results[i], i);
       }
-      map.fitBounds(bounds);
     }
   });
 }
@@ -444,6 +434,7 @@ function buildIWContent(place) {
 }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoCbqUGlJwmxR8P29YLvv4JQz4Bz5oJ9s&signed_in=true&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=initMap"
+        async defer></script>
   </body>
 </html>

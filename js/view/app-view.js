@@ -20,6 +20,9 @@ var app = app || {};
       this.myLocation = this.$("#pac-input")[0];
       this.myNear = this.$("#near-input")[0];
       this.myMap = this.$("#map_canvas")[0];
+      this.myMode = this.$("#mode")[0];
+      this.$listPanel = this.$("#listing-panel");
+      this.$list = this.$("#results");
 
       this.listenTo(app.togos, 'add', this.addone);
       this.listenTo(app.togo, 'change:location', this.changeLocation);
@@ -72,6 +75,8 @@ var app = app || {};
       document.getElementById('pac-input').placeholder = 'Enter a city';
       document.getElementById('near-input').placeholder = 'within(m)';
       app.togos.reset();
+      this.$list.html('');
+
       this.marker.setVisible(false);
     },
 
@@ -85,6 +90,7 @@ var app = app || {};
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myCountry);
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myLocation);
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myNear);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.myMode);
 
     },
 
@@ -110,7 +116,9 @@ var app = app || {};
     },
 
     addone: function(where) {
-      new app.TogoView({model: where});
+      var view = new app.TogoView({model: where});
+      // var view = new app.TogoView({model: where});
+      this.$list.append(view.addListContent());
     },
 
     setRadius: function(e) {
@@ -124,9 +132,11 @@ var app = app || {};
       var radius = app.togo.get("near");
 
       if (place.geometry && radius) {
+        this.$listPanel.find('.msg').hide();
         app.togos.reset();
+        this.$list.html('');
         this.map.panTo(place.geometry.location);
-        this.map.setZoom(15);
+        this.map.setZoom(10);
         if(this.circle) { this.circle.setMap(null); }
 
         this.circle = new google.maps.Circle({
@@ -168,7 +178,6 @@ var app = app || {};
     },
 
     newAttributes: function(char, result) {
-      console.log(result);
       return {
         id: char,
         info: result,
@@ -179,6 +188,7 @@ var app = app || {};
 
     changeLocation: function() {
       this.marker.setVisible(false);
+      this.$list.html('');
       // this.infowindow.close();
 
       this.place = app.togo.get("location");

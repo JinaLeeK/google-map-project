@@ -6,6 +6,8 @@ var ESC_KEY = 27;
 
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 
+var hostnameRegexp = new RegExp('^https?://.+?/');
+
 var countries = {
   'au': {
     center: {lat: -25.3, lng: 133.8},

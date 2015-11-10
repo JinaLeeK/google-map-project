@@ -30,10 +30,57 @@
         <option value="us">U.S.A.</option>
         <option value="uk">United Kingdom</option>
       </select>
+
       <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
       <input id="near-input" class="controls" type="text" placeholder="within(meters)">
-      <div id="right-panel"></div>
+      <select id="mode" class="controls">
+        <option value="DRIVING">Driving</option>
+        <option value="WALKING">Walking</option>
+        <option value="TRANSIT">Transit</option>
+      </select>
+
+      <div id="listing-panel" style="">
+        <p class="msg">Hotel Lists Will Render Here</p>
+        <table id="resultsTable">
+          <tbody id="results"></tbody>
+        </table>
+      </div>
+
+      <div id="right-panel" class="hidden">
+        <div id="directionSteps">
+          <p class="msg">Direction Steps Will Render Here</p>
+        </div>
+        <a href="#toggleBtn" id="paneToggle" class="out">&lt;</a>
+      </div>
+
       <div id="map_canvas"></div>
+
+      <script type="text/template" id="info-template">
+        <div id="info-content">
+          <table>
+            <tr id="iw-url-row" class="iw_table_row">
+              <td id="iw-icon" class="iw_table_icon"></td>
+              <td id="iw-url"></td>
+            </tr>
+            <tr id="iw-address-row" class="iw_table_row">
+              <td class="iw_attribute_name">Address:</td>
+              <td id="iw-address"></td>
+            </tr>
+            <tr id="iw-phone-row" class="iw_table_row">
+              <td class="iw_attribute_name">Telephone:</td>
+              <td id="iw-phone"></td>
+            </tr>
+            <tr id="iw-rating-row" class="iw_table_row">
+              <td class="iw_attribute_name">Rating:</td>
+              <td id="iw-rating"></td>
+            </tr>
+            <tr id="iw-website-row" class="iw_table_row">
+              <td class="iw_attribute_name">Website:</td>
+              <td id="iw-website"></td>
+            </tr>
+          </table>
+        </div>
+      </script>
     </div>
 
     <script src="bower_components/todomvc-common/base.js"></script>

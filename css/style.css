@@ -36,7 +36,7 @@ html, body, #map {
   margin-left: 12px;
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 200px;
+  width: 100px;
 }
 #near-input:focus {
   border-color: #4d90fe;
@@ -51,10 +51,34 @@ html, body, #map {
   text-overflow: ellipsis;
   width: 100px;
 }
+#mode {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 100px;
+}
+#listing-panel {
+  font-family: 'Roboto', 'sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
 #right-panel{
   font-family: 'Roboto', 'sans-serif';
   line-height: 30px;
   padding-left: 10px;
+}
+
+#right-panel a {
+  display: block;
+  text-decoration: none;
+  clear: both;
+}
+#right-panel.hiden {
+  display: none;
 }
 #right-panel select, #right-panel input {
   font-size: 15px;
@@ -65,12 +89,26 @@ html, body, #map {
 #right-panel i {
   font-size: 12px;
 }
+#directionSteps {
+  clear: both;
+  widht: 100%;
+  height: 100%;
+}
+#listing-panel {
+  height: 100%;
+  float: right;
+  width: 390px;
+  overflow: auto;
+}
 #right-panel {
   height: 100%;
   float: right;
   width: 390px;
   overflow: auto;
 }
+#listing-panel p {font-size: 13px; color: #999}
+#right-panel p {font-size: 13px; color: #999}
+#paneToggle {position: absolute; background:#FFC903; color: #000; width: 15px; padding: 3px 0; text-align: center; border:  1px solid #000; font-weight: bold; font-size: 16px; border-right: none; top: 0;}
 #map_canvase {
   margin-right: 400px;
 }
@@ -91,6 +129,23 @@ html, body, #map {
 	width:	20px;
 	height:	20px;
 	display: block;
+}
+table {
+  font-size: 12px;
+}
+.placeIcon {
+  width: 20px;
+  height: 34px;
+  margin: 4px;
+}
+.hotelIcon {
+  width: 24px;
+  height: 24px;
+}
+#resultsTable {
+  cursor: pointer;
+  border-collapse: collapse;
+  width: 320px;
 }
 /*.turn-sharp-left{ background: url('images/maneuvers-new.png') 0px 0px ;	}
 .turn-sharp-right{ background: url('images/maneuvers-new.png') 0px -20px ; }
