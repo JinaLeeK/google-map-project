@@ -8,13 +8,8 @@ var app = app || {};
     model: app.Where,
 
     selectedMarker: function() {
-      return this.where({visible: true});
+      return this.where({selected: true});
     },
-
-    unselectedMarker: function() {
-      return this.where({visible: false});
-    }
-
 
   });
   app.togos = new Togos();

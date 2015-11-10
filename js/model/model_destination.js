@@ -8,7 +8,13 @@ var app = app || {};
       id: '',
       info: {},
       location: {},
-      visible: false
-    }
+      travelmode: '',
+      selected: false
+    },
+    modeChange: function(input) {
+      this.set({
+        travelmode: input
+      })
+    },
   });
 })();

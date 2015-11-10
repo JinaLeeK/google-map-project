@@ -100,6 +100,9 @@ html, body, #map {
   width: 390px;
   overflow: auto;
 }
+#listing-panel.hidden {
+  display: none;
+}
 #right-panel {
   height: 100%;
   float: right;
@@ -146,6 +149,16 @@ table {
   cursor: pointer;
   border-collapse: collapse;
   width: 320px;
+}
+.iw_table_row {
+  height: 18px;
+}
+.iw_attribute_name {
+  font-weight: bold;
+  text-align: right;
+}
+.iw_table_icon {
+  text-align: right;
 }
 /*.turn-sharp-left{ background: url('images/maneuvers-new.png') 0px 0px ;	}
 .turn-sharp-right{ background: url('images/maneuvers-new.png') 0px -20px ; }

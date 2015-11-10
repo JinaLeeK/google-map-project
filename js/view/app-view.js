@@ -13,6 +13,7 @@ var app = app || {};
     events: {
       'keypress #near-input': 'setRadius',
       'change #countries': 'countryChange',
+      'change #mode': 'changeTravelMode'
     },
 
     initialize: function() {
@@ -127,6 +128,13 @@ var app = app || {};
       }
     },
 
+    changeTravelMode: function() {
+      var mode = this.myMode.value;
+      app.togos.each(function(where) {
+        where.modeChange(mode);
+      }, this);
+    },
+
     searchPlaces: function() {
       var place = app.togo.get("location");
       var radius = app.togo.get("near");
@@ -166,15 +174,27 @@ var app = app || {};
         radius: radius,
         types: ['lodging']
       };
+      var place = {};
 
       this.places.nearbySearch(search, function(results, status){
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i=0; i<results.length; i++) {
-            var char = String.fromCharCode('A'.charCodeAt(0) + i);
-            app.togos.add(_this.newAttributes(char,results[i]));
-          }
+          var num = 0;
+          results.forEach(function(result) {
+            var char = String.fromCharCode('A'.charCodeAt(0) + num);
+            _this.getInfoDetail(char, result);
+            num++;
+          })
         }
-      });
+      })
+    },
+
+    getInfoDetail(char, result) {
+      var _this = this;
+      this.places.getDetails( {placeId: result.place_id}, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          app.togos.add(_this.newAttributes(char, place));
+        }
+      })
     },
 
     newAttributes: function(char, result) {
@@ -182,14 +202,13 @@ var app = app || {};
         id: char,
         info: result,
         location: result.geometry.location,
-        visible: false
+        travelmode: this.myMode.value
       };
     },
 
     changeLocation: function() {
       this.marker.setVisible(false);
       this.$list.html('');
-      // this.infowindow.close();
 
       this.place = app.togo.get("location");
       if (this.place.geometry.viewport) {
@@ -209,8 +228,6 @@ var app = app || {};
         this.marker.setPosition(this.place.geometry.location);
         this.marker.setVisible(true);
 
-        // this.infowindow.setContent('<div><strong>' + this.place.name + '</strong><br>' + app.togo.get("address"));
-        // this.infowindow.open(this.map, this.marker);
     },
 });
 })(jQuery);

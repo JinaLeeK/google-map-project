@@ -13,24 +13,24 @@ var app = app || {};
 
     initialize:   function() {
       this.listenTo(app.togos, 'reset', this.markerClear);
-      this.listenTo(this.model, 'clickMarker', this.directionsRender);
-      this.listenTo(this.model, 'unset', this.directionClear);
+      this.listenTo(this.model, 'clickMarker', this.markersTrigger);
+      this.listenTo(this.model, 'change:selected', this.directionsRender);
+      this.listenTo(this.model, 'change:travelmode', this.directionsRender);
       this.render();
     },
 
     render: function() {
-      console.log(this.model);
       this.map = app.togo.get("map");
       this.markerSetup();
       this.infoWindowSetup();
       this.directionsSetup();
       this.invokeEvents();
-      return this.tr
     },
 
     invokeEvents: function() {
       var _this = this
       this.marker.addListener('click', function() {
+
         _this.model.trigger('clickMarker');
       });
     },
@@ -60,7 +60,6 @@ var app = app || {};
         _this.model.trigger('clickMarker');
       };
 
-
       return this.tr;
     },
 
@@ -76,7 +75,6 @@ var app = app || {};
       if(this.directionsDisplay) {
         this.directionsDisplay.setMap(null);
         this.$el.html('');
-        // this.directionsDisplay.setPanel(null);
       }
     },
 
@@ -97,7 +95,6 @@ var app = app || {};
     infoWindowSetup: function() {
       this.infowindow = new google.maps.InfoWindow();
       var place = this.marker.info, $content = $(this.template());
-      // console.log(place);
 
       $content.find("#iw-icon").html('<img class="hotelIcon" ' +
         'src="' + place.icon + '"/>');
@@ -138,7 +135,6 @@ var app = app || {};
         }
         $content.find("#iw-website-row").show();
         $content.find("#iw-website").text(website);
-        console.log(website);
       } else {
         $content.find("#iw-website-row").hide();
       }
@@ -158,45 +154,43 @@ var app = app || {};
       if(this.directionsDisplay) {
         this.directionsDisplay.setMap(null);
         this.$el.html('');
-        // this.directionsDisplay.setPanel(null);
       }
     },
 
     markersTrigger: function(where) {
-      where.trigger('unset');
+      app.togos.each(function(where) { where.set({selected: false}); }, this);
+      this.model.set({ selected: true});
     },
 
     directionsRender: function() {
-      app.togos.each(this.markersTrigger, this);
-
       var _this = this;
+      if( this.model.attributes.selected) {
+        this.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() { _this.marker.setAnimation(null);
+        }, 1400);
 
+        this.infowindow.open(this.map, this.marker);
+        this.directionsDisplay.setMap(this.map);
 
-      this.marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function() { _this.marker.setAnimation(null);
-      }, 1400);
-
-      this.infowindow.open(this.map, this.marker);
-      this.directionsDisplay.setMap(this.map);
-      // this.directionsDisplay.setPanel(this.el);
-
-      this.$el.html('<h3>Directions to ' + this.marker.info.name + '</a></h3>');
-      var origin_place_id = app.togo.get("location").place_id;
-      var destination_place_id = this.marker.info.place_id;
-      if (!origin_place_id || !destination_place_id) { return;}
-
-      this.directionsService.route({
-        origin: {'placeId': origin_place_id},
-        destination: {'placeId': destination_place_id},
-        travelMode: google.maps.TravelMode.DRIVING
-      }, function(response, status) {
-          if (status === google.maps.DirectionsStatus.OK) {
-            _this.directionsDisplay.setDirections(response);
-            _this.textDirections(response);
-          } else {
-            window.alert("Directions request failed due to" + status);
-          }
-      });
+        this.$el.html('<h3>Directions to ' + this.marker.info.name + '</a></h3>');
+        var origin_place_id = app.togo.get("location").place_id;
+        var destination_place_id = this.marker.info.place_id;
+        if (!origin_place_id || !destination_place_id) { return;}
+        this.directionsService.route({
+          origin: {'placeId': origin_place_id},
+          destination: {'placeId': destination_place_id},
+          travelMode: google.maps.TravelMode[this.model.attributes.travelmode]
+        }, function(response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+              _this.directionsDisplay.setDirections(response);
+              _this.textDirections(response);
+            } else {
+              window.alert("Directions request failed due to" + status);
+            }
+        });
+      } else {
+        this.directionClear();
+      }
     },
 
     textDirections: function(response) {
@@ -219,7 +213,6 @@ var app = app || {};
       output += '<div class="dir_end">'+ this.marker.info.name +'</div>';
 
 			this.el.innerHTML += output;
-
     }
 
   });
