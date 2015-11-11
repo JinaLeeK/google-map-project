@@ -9,6 +9,10 @@ var app = app || {};
   app.TogoView = Backbone.View.extend({
     el: '#directionSteps',
 
+    events: {
+      'click .destroy': 'closePanel'
+    },
+
     template: _.template($("#info-template").html()),
 
     initialize:   function() {
@@ -172,7 +176,6 @@ var app = app || {};
         this.infowindow.open(this.map, this.marker);
         this.directionsDisplay.setMap(this.map);
 
-        this.$el.html('<h3>Directions to ' + this.marker.info.name + '</a></h3>');
         var origin_place_id = app.togo.get("location").place_id;
         var destination_place_id = this.marker.info.place_id;
         if (!origin_place_id || !destination_place_id) { return;}
@@ -196,6 +199,7 @@ var app = app || {};
     textDirections: function(response) {
       var dir = response.routes[0].legs[0];
       var output = '';
+      this.$el.html('<button class="destroy"></button><h3>Directions to ' + this.marker.info.name + '</h3>');
 
       output += '<div class="dir_start">' + dir.start_address + '</div>';
       output += '<div class="dir_summary silver">Travel: '+ dir.distance.text +' - about '+ dir.duration.text +'</div>';
@@ -213,6 +217,10 @@ var app = app || {};
       output += '<div class="dir_end">'+ this.marker.info.name +'</div>';
 
 			this.el.innerHTML += output;
+    },
+
+    clear: function() {
+      alert('test');
     }
 
   });

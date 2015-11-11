@@ -13,7 +13,9 @@ var app = app || {};
     events: {
       'keypress #near-input': 'setRadius',
       'change #countries': 'countryChange',
-      'change #mode': 'changeTravelMode'
+      'change #mode': 'changeTravelMode',
+      'click .destroy': 'closePanel'
+
     },
 
     initialize: function() {
@@ -24,7 +26,9 @@ var app = app || {};
       this.myMode = this.$("#mode")[0];
       this.$listPanel = this.$("#listing-panel");
       this.$list = this.$("#results");
+      this.$directionPanel = this.$("#right-panel");
 
+      this.listenTo(app.togos, 'change:selected', this.togglePanel);
       this.listenTo(app.togos, 'add', this.addone);
       this.listenTo(app.togo, 'change:location', this.changeLocation);
       this.listenTo(app.togo, 'change:location', this.searchPlaces);
@@ -50,6 +54,16 @@ var app = app || {};
           anchorPoint: new google.maps.Point(0, -29),
           title: 'start point'
       });
+    },
+
+    closePanel: function() {
+      this.$directionPanel.removeClass('shown').addClass('hidden');
+      this.$listPanel.removeClass('hidden').addClass('shown');
+    },
+
+    togglePanel: function() {
+      this.$directionPanel.removeClass('hidden').addClass('shown');
+      this.$listPanel.removeClass('shown').addClass('hidden');
     },
 
     autoCompleteSetup: function() {
