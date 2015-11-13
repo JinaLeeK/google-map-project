@@ -4,6 +4,12 @@ html, body, #map {
   padding: 0;
 }
 
+/*body { font: 14px Georgia, serif; color: #222;}*/
+
+/*h1 { margin: 0 0 15px 0; font: bold 48px Helvetica, Arial, Sans-Serif; letter-spacing: -2px; }
+h2 { margin: 0 0 15px 0; font: bold 32px Helvetica, Arial, Sans-Serif; letter-spacing: -1px; text-shadow: 0 1px 0px rgba(255,255,255,0.3); }
+h3 { margin: 0 0  1px 0; font: bold 18px Helvetica, Arial, Sans-Serif; letter-spacing: -1px; }
+*/
 button {
 	margin: 0;
 	padding: 0;
@@ -81,10 +87,38 @@ button {
   font-family: 'Roboto', 'sans-serif';
   line-height: 30px;
   padding-left: 10px;
+  float: right;
+  overflow: auto;
+  padding: 10px;
+  width: 390px;
 }
+/*#listing-panel {
+  float: right;
+  overflow: auto;
+  height: 50%;
+  list-style: none;
+  padding: 10px;
+}*/
+
+/*#listing-panel {
+  float: right;
+  width: 390px;
+  overflow: auto;
+}*/
+/*#listing-panel li:hover, #listing-panel li.hover { background: #ffe8b2 url(./shadow.png) 128px 0 repeat-y; }
+#listing-panel li:hover h3, #listing-panel li.hover h3 { color: red; text-shadow: 0 1px 0px rgba(255,255,255,0.3); }*/
+
+#listing-panel.hidden {
+  display: none;
+}
+#listing-panel.shown {
+  display: block;
+}
+
+
 #right-panel{
   font-family: 'Roboto', 'sans-serif';
-  line-height: 30px;
+  line-height: 26px;
   padding-left: 10px;
 }
 
@@ -113,25 +147,13 @@ button {
   widht: 100%;
   height: 100%;
 }
-#listing-panel {
-  height: 100%;
-  float: right;
-  width: 390px;
-  overflow: auto;
-}
-#listing-panel.hidden {
-  display: none;
-}
-#listing-panel.shown {
-  display: block;
-}
 #right-panel {
   height: 100%;
   float: right;
   width: 390px;
   overflow: auto;
 }
-#listing-panel p {font-size: 13px; color: #999}
+/*#listing-panel p {font-size: 13px; color: #999}*/
 #right-panel p {font-size: 13px; color: #999}
 #map_canvase {
   margin-right: 400px;
@@ -206,17 +228,20 @@ table {
 .destroy:after {
   content: '✖';
 }
-/*.turn-sharp-left{ background: url('images/maneuvers-new.png') 0px 0px ;	}
-.turn-sharp-right{ background: url('images/maneuvers-new.png') 0px -20px ; }
-.turn-left{	background: url('images/maneuvers-new.png') 0px -40px ;	}
-.turn-right{ background: url('images/maneuvers-new.png') 0px -60px ; }
-.turn-slight-left{ background: url('images/maneuvers-new.png') 0px -80px ; }
-.turn-slight-right{	background: url('images/maneuvers-new.png') 0px -100px ; }
-.ramp-left{	background: url('images/maneuvers-new.png') 0px -120px ; }
-.ramp-right{ background: url('images/maneuvers-new.png') 0px -140px ; }
-.fork-left{	background: url('images/maneuvers-new.png') 0px -160px ; }
-.fork-right{ background: url('images/maneuvers-new.png') 0px -180px ; }
-.straight{ background: url('images/maneuvers-new.png') 0px -200px ; }
-.merge{ background: url('images/maneuvers-new.png') 0px -220px ; }
-.roundabout-left{ background: url('images/maneuvers-new.png') 0px -240px ; }
-.roundabout-right{ background: url('images/maneuvers-new.png') 0px -260px ; }*/
+
+.turn-sharp-left{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px 0px ;	}
+.turn-left{	background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -16px ;	}
+
+.turn-slight-right{	background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -100px ; }
+.turn-right{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -64px ; }
+.straight{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -200px ; }
+
+.turn-sharp-right{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -20px ; }
+.turn-slight-left{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -80px ; }
+.ramp-left{	background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -120px ; }
+.ramp-right{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -140px ; }
+.fork-left{	background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -160px ; }
+.fork-right{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -180px ; }
+.merge{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -220px ; }
+.roundabout-left{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -240px ; }
+.roundabout-right{ background: url('http://maps.gstatic.com/mapfiles/api-3/images/maneuvers.png') 0px -260px ; }*/

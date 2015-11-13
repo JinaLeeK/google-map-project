@@ -39,6 +39,39 @@ var app = app || {};
       });
     },
 
+    // addListContent: function() {
+    //   this.li = document.createElement('li');
+    //
+    //   var _this = this;
+    //   var char = this.model.attributes.id;
+    //   var markerIcon = MARKER_PATH + char + '.png';
+    //   var charId = char.charCodeAt(0) - 'A'.charCodeAt(0);
+    //
+    //   var nameElem = document.createElement('h3');
+    //   nameElem.textContent = this.marker.info.name;
+    //   this.li.appendChild(nameElem);
+    //
+    //   if (this.marker.info.rating) {
+    //     var ratingElem = document.createElement('p');
+    //     var ratingHtml = '';
+    //     for (var i=0; i<5; i++) {
+    //       if (this.marker.info.rating < (i + 0.5)) {
+    //         ratingHtml += '&#10025;';
+    //       } else {
+    //         ratingHtml += '&#10029;';
+    //       }
+    //     }
+    //     ratingElem.innerHTML = ratingHtml;
+    //     this.li.appendChild(ratingElem);
+    //   }
+    //
+    //   this.li.onclick = function() {
+    //       _this.model.trigger('clickMarker');
+    //     };
+    //
+    //     return this.li;
+    // },
+
     addListContent: function() {
       this.tr = document.createElement('tr');
 
@@ -175,6 +208,7 @@ var app = app || {};
 
         this.infowindow.open(this.map, this.marker);
         this.directionsDisplay.setMap(this.map);
+        // this.directionsDisplay.setPanel(this.el);
 
         var origin_place_id = app.togo.get("location").place_id;
         var destination_place_id = this.marker.info.place_id;
@@ -206,12 +240,12 @@ var app = app || {};
 
       output += '<table>';
       for (var i=0; i<dir.steps.length; i++){
-				output += '<tr style="border-bottom: 1px solid silver;">';
-				output += '<td class="dir_row"><span class="dir_sprite '+ dir.steps[i].maneuver +'"></span></td>';
-				output += '<td class="dir_row">'+ (i+1) +'.</td>';
-				output += '<td class="dir_row">'+ dir.steps[i].instructions +'</td>';
-				output += '<td class="dir_row" style="white-space:nowrap;">'+ dir.steps[i].distance.text +'</td>';
-				output += '</tr>';
+        output += '<tr style="border-bottom: 1px solid silver;">';
+            output += '<td class="dir_row"><span class="dir_sprite '+ dir.steps[i].maneuver +'"></span></td>';
+            output += '<td class="dir_row">'+ (i+1) +'.</td>';
+            output += '<td class="dir_row">'+ dir.steps[i].instructions +'</td>';
+            output += '<td class="dir_row" style="white-space:nowrap;">'+ dir.steps[i].distance.text +'</td>';
+            output += '</tr>';
 			}
 			output += '</table>';
       output += '<div class="dir_end">'+ this.marker.info.name +'</div>';

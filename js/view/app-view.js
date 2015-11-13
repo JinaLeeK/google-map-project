@@ -90,7 +90,10 @@ var app = app || {};
       document.getElementById('pac-input').placeholder = 'Enter a city';
       document.getElementById('near-input').placeholder = 'within(m)';
       app.togos.reset();
+      this.closePanel();
+
       this.$list.html('');
+      // this.$listPanel.html('');
 
       this.marker.setVisible(false);
     },
@@ -111,6 +114,7 @@ var app = app || {};
 
     getPlace: function() {
       app.togos.reset();
+      // this.closePanel();
 
       var place = this.getPlace();
       if (!place.geometry) {
@@ -156,7 +160,9 @@ var app = app || {};
       if (place.geometry && radius) {
         this.$listPanel.find('.msg').hide();
         app.togos.reset();
+        this.closePanel();
         this.$list.html('');
+        // this.$listPanel.html('');
         this.map.panTo(place.geometry.location);
         this.map.setZoom(10);
         if(this.circle) { this.circle.setMap(null); }
@@ -223,6 +229,7 @@ var app = app || {};
     changeLocation: function() {
       this.marker.setVisible(false);
       this.$list.html('');
+      // this.$listPanel.html('');
 
       this.place = app.togo.get("location");
       if (this.place.geometry.viewport) {
