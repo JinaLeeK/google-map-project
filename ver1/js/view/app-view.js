@@ -69,6 +69,7 @@ var app = app || {};
     autoCompleteSetup: function() {
       this.autocomplete = new google.maps.places.Autocomplete(this.myLocation);
       this.autocomplete.bindTo('bounds', this.map);
+      console.log(this.autocomplete);
       this.autocomplete.addListener('place_changed', this.getPlace, this.autocomplete);
     },
 
@@ -117,6 +118,7 @@ var app = app || {};
       // this.closePanel();
 
       var place = this.getPlace();
+      console.log(place.geometry);
       if (!place.geometry) {
         window.alert("Autocomplete's returned place contains no geometry");
         return;
